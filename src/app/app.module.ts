@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import { FroalaEditorModule, FroalaViewModule } from 'angular2-froala-wysiwyg';
+import {BaseRequestOptions, HttpModule} from '@angular/http';
 import {
   NgModule,
   ApplicationRef
@@ -15,6 +17,9 @@ import {
   PreloadAllModules
 } from '@angular/router';
 
+import * as $ from 'jquery';
+window["$"] = $;
+window["jQuery"] = $;
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -24,13 +29,18 @@ import { ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
-import { HomeComponent } from './home';
-import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
-import { XLargeDirective } from './home/x-large';
-
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { AlertComponent } from './_directives/index';
 import '../styles/styles.scss';
 import '../styles/headings.css';
+import {LoginComponent} from "./login/login.component";
+import {MockBackend} from "@angular/http/testing";
+import {fakeBackendProvider} from "./_helpers/fake-backend";
+import { MockConnection } from '@angular/http/testing';
+import {AuthenticationService} from "./_services/authenticiation.service";
+import {AuthGuard} from "./_guard/auth.guard";
+import {AlertService} from "./_services/alert.service";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -51,16 +61,16 @@ type StoreType = {
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    AboutComponent,
-    HomeComponent,
+    LoginComponent,
     NoContentComponent,
-    XLargeDirective
   ],
   /**
    * Import Angular's modules.
    */
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
     FormsModule,
     HttpModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
@@ -70,7 +80,15 @@ type StoreType = {
    */
   providers: [
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    AuthGuard,
+    AlertService,
+    AuthenticationService,
+
+    // providers used to create fake backend
+    fakeBackendProvider,
+    MockBackend,
+    BaseRequestOptions
   ]
 })
 export class AppModule {

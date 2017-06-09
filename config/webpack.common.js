@@ -218,7 +218,12 @@ module.exports = function (options) {
         path: helpers.root('dist'),
         filename: 'webpack-assets.json',
         prettyPrint: true
-      }),
+      },
+        new webpack.ProvidePlugin({
+          $: "jquery",
+          jQuery: "jquery"
+        })
+      ),
 
       /**
        * Plugin: ForkCheckerPlugin
@@ -288,8 +293,20 @@ module.exports = function (options) {
        */
       new CopyWebpackPlugin([
         { from: 'src/assets', to: 'assets' },
-        { from: 'src/meta'}
-      ],
+        { from: 'src/meta'},
+        {
+          from: 'node_modules/froala-editor/css/',
+          to: 'assets/froala-editor/css/',
+        },
+        {
+          from: 'node_modules/font-awesome/css/font-awesome.min.css',
+          to: 'assets/font-awesome/css/font-awesome.min.css',
+        },
+        {
+          from: 'node_modules/font-awesome/fonts',
+          to: 'assets/font-awesome/fonts'
+          }
+        ],
         isProd ? { ignore: [ 'mock-data/**/*' ] } : undefined
       ),
 

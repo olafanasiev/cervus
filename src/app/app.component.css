@@ -1,8 +1,32 @@
 html, body{
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif
+  font-family: Arial, Helvetica, sans-serif;
+  width:100%;
+  margin:0;
+  padding:0;
 }
 
+body{
+	background: url('../assets/img/main_2.jpg') 0 0 repeat transparent;
+	display:flex;
+}
+
+main{
+	height:100%;
+	display:flex;
+	justify-content: center;
+}
+
+app{
+	width:100%;
+}
+
+posts-list{
+	width: 70%;
+	background-color: white;
+	padding:30px;
+	box-shadow: #FFF 0 0 15px 4px;
+}
 a.active {
   background-color: gray;
 }
